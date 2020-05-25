@@ -50,13 +50,13 @@ pub fn ask_quiz(count: u8) {
         let mut input = String::new();
         let _result = io::stdin().read_line(&mut input);
         let input: u8 = input.trim().parse().unwrap_or(0);
-        let mut verdict = Red.paint("wrong");
+        let mut verdict = Red.bold().paint("wrong");
         if input == answer {
             correct_answer_count += 1;
-            verdict = Green.paint("correct");
+            verdict = Green.bold().paint("correct");
         }
         println!(
-            "Your answer is {}. {} {} {} = {}",
+            "Your answer is {}. {} {} {} = {}\n",
             verdict, a, oper, b, answer
         );
         if q_count == count {
