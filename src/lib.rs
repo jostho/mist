@@ -1,11 +1,13 @@
-use ansi_term::Colour::{Green, Red};
+use ansi_term::Colour::{Cyan, Green, Red};
 use rand::Rng;
 use std::io;
 use std::time::Instant;
 
-const MAX_COUNT: u8 = 100; // stay under 255, u8::MAX
-const MAX_INT_A: u8 = 21;
-const MAX_INT_B: u8 = 11;
+// all u8s - please stay under 255, u8::MAX
+const MAX_COUNT: u8 = 100;
+const MAX_LEVEL: u8 = 10;
+const STEP_LEVEL: u8 = 10;
+const MAX_INT: u8 = 11;
 
 pub fn is_valid_count(val: String) -> Result<(), String> {
     let count: u8 = match val.parse() {
@@ -20,17 +22,34 @@ pub fn is_valid_count(val: String) -> Result<(), String> {
     }
 }
 
-pub fn ask_quiz(count: u8) {
+pub fn is_valid_level(val: String) -> Result<(), String> {
+    let level: u8 = match val.parse() {
+        Ok(level) => level,
+        Err(e) => return Err(e.to_string()),
+    };
+
+    if level < MAX_LEVEL {
+        Ok(())
+    } else {
+        Err(format!("Value should be less than {}", MAX_LEVEL))
+    }
+}
+
+pub fn ask_quiz(count: u8, level: u8) {
     let mut rng = rand::thread_rng();
     let mut q_count: u8 = 0;
     let mut correct_answer_count: u8 = 0;
     let mut done = false;
 
+    let max = MAX_INT + (level * STEP_LEVEL);
+    let header = format!("Count: {}, Level: {}, Max: {}", count, level, max);
+    println!("{}", Cyan.paint(header));
+
     let start_time = Instant::now();
     while !done {
-        let a = rng.gen_range(1, MAX_INT_A);
-        let b = rng.gen_range(1, MAX_INT_B);
-        if a < b {
+        let a = rng.gen_range(1, max);
+        let b = rng.gen_range(1, max);
+        if a <= b {
             continue;
         }
         // it's a GO
