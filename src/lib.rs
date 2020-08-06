@@ -10,28 +10,23 @@ const STEP_LEVEL: u8 = 10;
 const MAX_INT: u8 = 11;
 
 pub fn is_valid_count(val: String) -> Result<(), String> {
-    let count: u8 = match val.parse() {
-        Ok(count) => count,
-        Err(e) => return Err(e.to_string()),
-    };
-
-    if count < MAX_COUNT {
-        Ok(())
-    } else {
-        Err(format!("Value should be less than {}", MAX_COUNT))
-    }
+    is_valid(val, MAX_COUNT)
 }
 
 pub fn is_valid_level(val: String) -> Result<(), String> {
-    let level: u8 = match val.parse() {
-        Ok(level) => level,
+    is_valid(val, MAX_LEVEL)
+}
+
+fn is_valid(val: String, max: u8) -> Result<(), String> {
+    let value: u8 = match val.parse() {
+        Ok(value) => value,
         Err(e) => return Err(e.to_string()),
     };
 
-    if level < MAX_LEVEL {
+    if value < max {
         Ok(())
     } else {
-        Err(format!("Value should be less than {}", MAX_LEVEL))
+        Err(format!("value should be less than {}", max))
     }
 }
 
@@ -88,4 +83,33 @@ pub fn ask_quiz(count: u8, level: u8) {
         count,
         start_time.elapsed().as_secs()
     );
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn is_valid_for_string() {
+        let result = is_valid("str".to_string(), MAX_COUNT);
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "invalid digit found in string");
+    }
+
+    #[test]
+    fn is_valid_for_42() {
+        let result = is_valid("42".to_string(), MAX_COUNT);
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), ());
+    }
+
+    #[test]
+    fn is_valid_for_100() {
+        let result = is_valid("100".to_string(), MAX_COUNT);
+        assert!(result.is_err());
+        assert_eq!(
+            result.unwrap_err(),
+            format!("value should be less than {}", MAX_COUNT)
+        );
+    }
 }
