@@ -77,12 +77,13 @@ pub fn ask_quiz(count: u8, level: u8) {
             done = true;
         }
     }
-    println!(
-        "Final score: {}/{} . Time: {}s",
+    let footer = format!(
+        "Score: {}/{}, Time: {}s",
         correct_answer_count,
         count,
         start_time.elapsed().as_secs()
     );
+    println!("{}", Cyan.paint(footer));
 }
 
 #[cfg(test)]
