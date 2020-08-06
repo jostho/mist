@@ -70,9 +70,10 @@ pub fn ask_quiz(count: u8, level: u8) {
             verdict = Green.bold().paint("correct");
         }
         println!(
-            "Your answer is {}. {} {} {} = {}\n",
+            "Your answer is {}. {} {} {} = {}",
             verdict, a, oper, b, answer
         );
+        println!("{}", Cyan.paint("-"));
         if q_count == count {
             done = true;
         }
