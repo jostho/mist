@@ -7,7 +7,6 @@ use std::time::Instant;
 const MAX_COUNT: u8 = 100;
 const MAX_LEVEL: u8 = 10;
 const STEP_LEVEL: u8 = 10;
-const MAX_INT: u8 = 11;
 
 pub fn is_valid_count(val: String) -> Result<(), String> {
     is_valid(val, MAX_COUNT)
@@ -36,7 +35,7 @@ pub fn ask_quiz(count: u8, level: u8) {
     let mut correct_answer_count: u8 = 0;
     let mut done = false;
 
-    let max = MAX_INT + (level * STEP_LEVEL);
+    let max = STEP_LEVEL + (level * STEP_LEVEL);
     let header = format!("Count: {}, Level: {}, Max: {}", count, level, max);
     println!("{}", Cyan.paint(header));
 
