@@ -154,8 +154,8 @@ mod tests {
     }
 
     #[test]
-    fn is_valid_for_100() {
-        let result = is_valid("100".to_string(), MAX_COUNT);
+    fn is_valid_for_max() {
+        let result = is_valid(MAX_COUNT.to_string(), MAX_COUNT);
         assert!(result.is_err());
         assert_eq!(
             result.unwrap_err(),
