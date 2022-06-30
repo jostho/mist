@@ -6,8 +6,8 @@ This is a simple math quiz program written in rust.
 
 ## Environment
 
-* fedora 33
-* rust 1.49
+* fedora 36
+* rust 1.61
 
 ## Build
 
