@@ -3,31 +3,7 @@ use rand::Rng;
 use std::io;
 use std::time::Instant;
 
-// all u8s - please stay under 255, u8::MAX
-const MAX_COUNT: u8 = 100;
-const MAX_LEVEL: u8 = 10;
 const STEP_LEVEL: u8 = 10;
-
-pub fn is_valid_count(val: String) -> Result<(), String> {
-    is_valid(val, MAX_COUNT)
-}
-
-pub fn is_valid_level(val: String) -> Result<(), String> {
-    is_valid(val, MAX_LEVEL)
-}
-
-fn is_valid(val: String, max: u8) -> Result<(), String> {
-    let value: u8 = match val.parse() {
-        Ok(value) => value,
-        Err(e) => return Err(e.to_string()),
-    };
-
-    if value < max {
-        Ok(())
-    } else {
-        Err(format!("value should be less than {}", max))
-    }
-}
 
 pub fn ask_quiz(count: u8, level: u8) {
     let mut rng = rand::thread_rng();
@@ -41,8 +17,8 @@ pub fn ask_quiz(count: u8, level: u8) {
 
     let start_time = Instant::now();
     while !done {
-        let a = rng.gen_range(1, max);
-        let b = rng.gen_range(1, max);
+        let a = rng.gen_range(1..max);
+        let b = rng.gen_range(1..max);
         if a <= b {
             continue;
         }
@@ -98,9 +74,9 @@ pub fn ask_sequence(count: u8, level: u8) {
 
     let start_time = Instant::now();
     while !done {
-        let num: u32 = rng.gen_range(2, max).into();
+        let num: u32 = rng.gen_range(2..max).into();
         let mut multiples: Vec<u32> = (1..11).map(|x| x * num).collect();
-        let index: usize = rng.gen_range(1, multiples.len());
+        let index: usize = rng.gen_range(1..multiples.len());
         let answer = multiples[index];
         multiples[index] = 0;
         let mut multiples_as_str: Vec<String> = multiples.iter().map(|x| x.to_string()).collect();
@@ -133,33 +109,4 @@ pub fn ask_sequence(count: u8, level: u8) {
         start_time.elapsed().as_secs()
     );
     println!("{}", Cyan.paint(footer));
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn is_valid_for_string() {
-        let result = is_valid("str".to_string(), MAX_COUNT);
-        assert!(result.is_err());
-        assert_eq!(result.unwrap_err(), "invalid digit found in string");
-    }
-
-    #[test]
-    fn is_valid_for_42() {
-        let result = is_valid("42".to_string(), MAX_COUNT);
-        assert!(result.is_ok());
-        assert_eq!(result.unwrap(), ());
-    }
-
-    #[test]
-    fn is_valid_for_max() {
-        let result = is_valid(MAX_COUNT.to_string(), MAX_COUNT);
-        assert!(result.is_err());
-        assert_eq!(
-            result.unwrap_err(),
-            format!("value should be less than {}", MAX_COUNT)
-        );
-    }
 }
